@@ -39,18 +39,31 @@ const SudokuGame: React.FC = () => {
   };
 
   const checkSolution = () => {
+    // Create a board from the initial puzzle and user inputs
     const currentBoard = puzzle.map((value, index) =>
       userInputs[index] !== undefined ? userInputs[index] : value
     );
+  
+    // Call the solve function from the sudoku-core library
     const solutionResult = solve(currentBoard);
-    console.log(
-      "Checking solution for board:",
-      currentBoard,
-      "Solved:",
-      solutionResult.solved
-    ); // Log the check
-    return solutionResult.solved;
+  
+    // Ensure that the solve function returned a valid solution board
+    if (solutionResult.solved && solutionResult.board) {
+      console.log("The puzzle is correctly solved!");
+      return true;
+    } else {
+      // Check each cell only if we have a solution board
+      const isCorrectSoFar = solutionResult.board && currentBoard.every((value, index) => {
+        // If the cell is empty or matches the solution, it's correct so far
+        return value === null || value === solutionResult.board?.[index];
+      });
+  
+      console.log(`The current inputs are ${isCorrectSoFar ? 'correct' : 'incorrect'}.`);
+      return isCorrectSoFar ?? false;
+    }
   };
+  
+  
 
   return (
     <Box sx={{ flexGrow: 1, padding: 3, maxWidth: 450, margin: "auto" }}>
@@ -95,14 +108,9 @@ const SudokuGame: React.FC = () => {
       </div>
       <Button
         variant="contained"
-        onClick={() => newGame("easy")}
-        sx={{ mt: 3 }}
-      >
-        New Game
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => alert(checkSolution() ? "Correct!" : "Incorrect!")}
+        onClick={() =>
+          alert(checkSolution() ? "Correct so far!" : "Incorrect!")
+        }
         sx={{ mt: 3, ml: 2 }}
       >
         Check Solution
