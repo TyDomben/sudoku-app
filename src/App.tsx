@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css"; // Assuming you have some CSS for basic styling
 import SudokuGame from "./components/SudokuGame/SudokuGame";
 
 const App: React.FC = () => {
@@ -11,7 +10,9 @@ const App: React.FC = () => {
       <main>
         <SudokuGame />
       </main>
-      <footer>{/* You might want to add a footer for your app */}</footer>
+      <footer>
+        <p>Enjoy our Sudoku challenge!</p>
+      </footer>
     </div>
   );
 };
